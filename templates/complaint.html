@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Complaint</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .complaint-container {
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            background: #1e1e1e;
+            box-shadow: 0px 4px 15px rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            position: relative;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .complaint-container input,
+        .complaint-container textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #2c2c2c;
+            color: white;
+            font-size: 16px;
+        }
+        .complaint-container button {
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .complaint-container button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="complaint-container">
+        <h2>Register Complaint</h2>
+        <form id="complaintForm">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="email" id="email" placeholder="Your Email" required>
+            <input type="tel" id="phone" placeholder="Phone Number" required>
+            <input type="text" id="address" placeholder="Your Address" required>
+            <textarea id="complaint" placeholder="Describe your complaint..." required></textarea>
+            <button type="submit">Submit</button>
+        </form>
+        <p id="statusMessage" style="color: lightgreen; display: none;">Complaint submitted successfully!</p>
+    </div>
+
+    <script>
+        emailjs.init("z42VIdN_Klts8HUQs"); // ✅ Replace with your EmailJS Public Key
+
+        document.getElementById("complaintForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form refresh
+
+            var templateParams = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                phone: document.getElementById("phone").value,
+                address: document.getElementById("address").value,
+                complaint: document.getElementById("complaint").value
+            };
+
+            emailjs.send("service_xpa47py", "template_s0omv1g", templateParams)
+                .then(function(response) {
+                    console.log("SUCCESS!", response.status, response.text);
+                    document.getElementById("statusMessage").style.display = "block";
+                }, function(error) {
+                    console.log("FAILED...", error);
+                    alert("Failed to send email: " + error.text);
+                });
+        });
+    </script>
+</body>
+</html>
